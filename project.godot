@@ -1,0 +1,32 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "ResourceFormatSaver",
+"class": "TextureArraySaver",
+"language": "GDScript",
+"path": "res://addons/better-texture-array/texture_array_saver.gd"
+} ]
+_global_script_class_icons={
+"TextureArraySaver": ""
+}
+
+[application]
+
+config/name="BetterTextureArray"
+config/icon="res://icon.png"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "better-texture-array" )
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
