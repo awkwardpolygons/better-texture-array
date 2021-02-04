@@ -37,7 +37,7 @@ func _init():
 	tbb_blu.toggle_mode = true
 	tbb_alp.toggle_mode = true
 	tbb_all.toggle_mode = true
-	tbb_vis.text = "Show layers"
+	tbb_vis.text = "Show"
 	tbb_red.icon = preload("res://addons/better-texture-array/icons/RED.svg")
 	tbb_grn.icon = preload("res://addons/better-texture-array/icons/GREEN.svg")
 	tbb_blu.icon = preload("res://addons/better-texture-array/icons/BLUE.svg")
