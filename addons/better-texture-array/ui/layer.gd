@@ -1,19 +1,31 @@
 tool
 extends Button
 
-export(int) var index setget set_index
+enum Channels {RED, GREEN, BLUE, ALPHA, ALL}
 export(Texture) var texture setget set_texture
+export(int) var index = 0 setget set_index
+export(Channels) var channel = Channels.ALL setget set_channel
+
 var viewer
 var index_label
+
+func set_texture(v: TextureLayered):
+	texture = v
+	viewer.material.set_shader_param("texarr", v)
 
 func set_index(v: int):
 	index = v
 	index_label.text = str(v)
 	viewer.material.set_shader_param("idx", v)
 
-func set_texture(v: TextureLayered):
-	texture = v
-	viewer.material.set_shader_param("texarr", v)
+func set_channel(v: int):
+	channel = v
+	var chn = Color(1, 1, 1, 1)
+	if v < Channels.ALL:
+		chn = Color(0, 0, 0, 0)
+		chn[v] = 1
+	prints(chn)
+	viewer.material.set_shader_param("chn", chn)
 
 func _init():
 	toggle_mode = true
