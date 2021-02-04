@@ -51,4 +51,4 @@ func _notification(what):
 
 func _toggled(pressed: bool):
 	if pressed:
-		texture.set_meta("selected", index)
+		texture.set_meta("layer_selected", index)
