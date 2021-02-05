@@ -8,6 +8,9 @@ export(Channels) var channel = Channels.ALL setget set_channel
 
 var viewer
 var index_label
+var edit_dialog: EditorFileDialog
+
+signal update_layer
 
 func set_texture(v: TextureLayered):
 	texture = v
@@ -26,7 +29,6 @@ func set_channel(v: int):
 	if v < Channels.ALL:
 		chn = Color(0, 0, 0, 0)
 		chn[v] = 1
-	prints(chn)
 	viewer.material.set_shader_param("chn", chn)
 
 func _init():
@@ -54,3 +56,10 @@ func _notification(what):
 func _toggled(pressed: bool):
 	if pressed:
 		texture.set_meta("layer_selected", index)
+
+func _input(event):
+	if is_hovered() and event is InputEventMouseButton and event.doubleclick:
+		edit_dialog.popup_for_layer(self)
+
+func update_layer(img, img_chn):
+	emit_signal("update_layer", img, index, img_chn, channel)
