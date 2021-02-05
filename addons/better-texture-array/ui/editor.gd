@@ -97,7 +97,6 @@ func update_list():
 
 func _ready():
 	label = "Layers"
-	rect_min_size = Vector2(0, 256)
 	add_child(create_button)
 	add_child(layer_box)
 #	add_child(create_dialog)
