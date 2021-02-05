@@ -13,6 +13,7 @@ func _init():
 	label = "Layers"
 	create_button = Button.new()
 	create_button.text = "Create"
+	create_dialog = preload("res://addons/better-texture-array/ui/create_dialog.tscn").instance()
 	
 	layer_box = VBoxContainer.new()
 	layer_list = VBoxContainer.new()
@@ -70,6 +71,8 @@ func _init():
 	layer_box.add_child(layer_list)
 	
 	tbb_vis.connect("toggled", self, "_toggle_layers")
+	create_button.connect("pressed", self, "_open_create_dialog")
+	create_dialog.connect("acknowledged", self, "_do_create_texarr")
 
 func update_list():
 	var texarr = get_edited_object()
@@ -99,11 +102,31 @@ func _ready():
 	label = "Layers"
 	add_child(create_button)
 	add_child(layer_box)
-#	add_child(create_dialog)
+	add_child(create_dialog)
 	set_bottom_editor(layer_box)
 
 func update_property():
+	prints("update_property")
 	update_list()
+
+func create_texarr(width: int, height: int, depth: int, format: int, flags: int = Texture.FLAGS_DEFAULT):
+	var data = {"width": width, "height": height, "depth": depth, "format": format, "flags": flags, "layers": []}
+	var img = Image.new()
+	img.create(width, height, true, format)
+	img.fill(Color.white)
+	img.generate_mipmaps()
+	for i in depth:
+		data["layers"].append(img)
+	emit_changed("data", data)
+
+func update_texarr(img: Image):
+	pass
+
+func _open_create_dialog():
+	create_dialog.popup_centered()
+
+func _do_create_texarr(ok, vals):
+	create_texarr(vals[0], vals[1], vals[2], vals[3], vals[4])
 
 func _toggle_layers(visible: bool):
 	layer_list.visible = visible
