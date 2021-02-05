@@ -172,6 +172,3 @@ func _toggle_layers(visible: bool):
 func _toggle_channel(visible: bool, chn: int):
 	for layer in layer_list.get_children():
 		layer.channel = chn
-
-func _on_update_layer(src, idx, src_chn, dst_chn):
-	update_texarr(src, idx, src_chn, dst_chn)
