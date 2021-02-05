@@ -2,8 +2,11 @@ tool
 extends EditorProperty
 
 const Layer = preload("res://addons/better-texture-array/ui/layer.gd")
+const EditDialog = preload("res://addons/better-texture-array/ui/edit_dialog.gd")
+var undo_redo: UndoRedo
 var create_button
 var create_dialog
+var edit_dialog
 var layer_box
 var layer_list
 var layer_group
@@ -14,6 +17,7 @@ func _init():
 	create_button = Button.new()
 	create_button.text = "Create"
 	create_dialog = preload("res://addons/better-texture-array/ui/create_dialog.tscn").instance()
+	edit_dialog = EditDialog.new()
 	
 	layer_box = VBoxContainer.new()
 	layer_list = VBoxContainer.new()
@@ -82,31 +86,30 @@ func update_list():
 	layer_list.rect_min_size.y = want * 192
 
 	for i in have:
-		var ch = children[i]
-		layer_list.remove_child(ch)
-#		ch.disconnect("update_layer", self, "_on_update_layer")
-#		ch.main_button.disconnect("toggled", self, "_on_layer_toggled")
-		ch.queue_free()
+		var layer = children[i]
+		layer_list.remove_child(layer)
+		layer.disconnect("update_layer", self, "update_texarr")
+		layer.queue_free()
 
 	for i in want:
 		var layer = Layer.new()
+		layer.edit_dialog = edit_dialog
 		layer_list.add_child(layer)
 		layer.index = i
 		layer.texture = texarr
 		layer.rect_min_size = Vector2(128, 128)
 		layer.group = layer_group
-#		layer.connect("update_layer", self, "_on_update_layer")
-#		layer.main_button.connect("toggled", self, "_on_layer_toggled", [i])
+		layer.connect("update_layer", self, "update_texarr")
 
 func _ready():
 	label = "Layers"
 	add_child(create_button)
 	add_child(layer_box)
 	add_child(create_dialog)
+	add_child(edit_dialog)
 	set_bottom_editor(layer_box)
 
 func update_property():
-	prints("update_property")
 	update_list()
 
 func create_texarr(width: int, height: int, depth: int, format: int, flags: int = Texture.FLAGS_DEFAULT):
@@ -119,8 +122,43 @@ func create_texarr(width: int, height: int, depth: int, format: int, flags: int 
 		data["layers"].append(img)
 	emit_changed("data", data)
 
-func update_texarr(img: Image):
-	pass
+func update_texarr(src: Image, idx: int, src_chn: int, dst_chn: int):
+	var texarr: TextureLayered = get_edited_object()
+	var prv = texarr.get_layer_data(idx)
+	undo_redo.create_action("Update layer")
+	undo_redo.add_do_method(get_script(), "_update_layer", texarr, src, idx, src_chn, dst_chn)
+	undo_redo.add_undo_method(get_script(), "_update_layer", texarr, prv, idx, src_chn, dst_chn)
+	undo_redo.commit_action()
+
+static func _update_layer(texarr: TextureLayered, src, idx: int, chn_src: int = Layer.Channels.ALL, chn_dst: int = Layer.Channels.ALL):
+	var dst: Image
+	var size = Vector2(texarr.get_width(), texarr.get_height())
+	
+	if src is Texture:
+		src = src.get_data()
+	if src.get_size() != size:
+		src.resize(size.x, size.y)
+	if src.is_compressed():
+		src.decompress()
+	if src.get_format() != texarr.get_format():
+		src.convert(texarr.get_format())
+	
+	if chn_src == Layer.Channels.ALL or chn_dst == Layer.Channels.ALL:
+		dst = src
+	else:
+		dst = texarr.get_layer_data(idx)
+		src.lock()
+		dst.lock()
+		for y in size.y:
+			for x in size.x:
+				var clr = dst.get_pixel(x, y)
+				clr[chn_dst] = src.get_pixel(x, y)[chn_src]
+				dst.set_pixel(x, y, clr)
+		dst.unlock()
+		src.unlock()
+	
+	dst.generate_mipmaps()
+	texarr.set_layer_data(dst, idx)
 
 func _open_create_dialog():
 	create_dialog.popup_centered()
@@ -134,3 +172,6 @@ func _toggle_layers(visible: bool):
 func _toggle_channel(visible: bool, chn: int):
 	for layer in layer_list.get_children():
 		layer.channel = chn
+
+func _on_update_layer(src, idx, src_chn, dst_chn):
+	update_texarr(src, idx, src_chn, dst_chn)
