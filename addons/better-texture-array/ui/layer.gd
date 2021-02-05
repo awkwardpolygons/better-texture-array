@@ -2,7 +2,7 @@ tool
 extends Button
 
 enum Channels {RED, GREEN, BLUE, ALPHA, ALL}
-export(Texture) var texture setget set_texture
+export(TextureLayered) var texture setget set_texture
 export(int) var index = 0 setget set_index
 export(Channels) var channel = Channels.ALL setget set_channel
 
@@ -11,7 +11,9 @@ var index_label
 
 func set_texture(v: TextureLayered):
 	texture = v
-	viewer.material.set_shader_param("texarr", v)
+	var is_3d = v is Texture3D
+	viewer.material.set_shader_param("is_3d", is_3d)
+	viewer.material.set_shader_param("tex3d" if is_3d else "texarr", v)
 
 func set_index(v: int):
 	index = v
