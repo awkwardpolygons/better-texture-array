@@ -10,7 +10,7 @@ var inspect_array
 
 func _enter_tree():
 	editor = get_editor_interface()
-	undo_redo = editor.get_undo_redo()
+	undo_redo = get_undo_redo()
 	filesystem = editor.get_resource_filesystem()
 	import_array = preload("res://addons/better-texture-array/texture_array_builder.gd").new()
 	import_array.is_3d = false
