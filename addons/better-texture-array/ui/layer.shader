@@ -13,5 +13,9 @@ void fragment() {
 	} else {
 		lyr = texture(texarr, vec3(UV, idx));
 	}
-	COLOR = all(bvec4(chn)) ? lyr : vec4(dot(lyr, chn));
+	
+//	COLOR = all(bvec4(chn)) ? lyr : vec4(dot(lyr, chn));
+	bvec4 bchn = bvec4(chn);
+	lyr = lyr * chn;
+	COLOR = all(bchn) ? lyr : (all(not(bchn.rgb)) && bchn.a ? vec4(lyr.a) : vec4(lyr.rgb, 1));
 }
