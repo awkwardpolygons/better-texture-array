@@ -29,6 +29,9 @@ func _init():
 	channel_option_box.add_child(channel_option)
 	file_dialog_box.add_child(channel_option_box)
 
+func _exit_tree():
+	disconnect("file_selected", self, "_on_file_selected")
+
 func popup_for_layer(lyr):
 	layer = lyr
 	# Only show the channel selection box if you have selected
