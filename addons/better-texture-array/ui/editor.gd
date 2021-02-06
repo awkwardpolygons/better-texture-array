@@ -2,6 +2,7 @@ tool
 extends EditorProperty
 
 const Layer = preload("res://addons/better-texture-array/ui/layer.gd")
+const CreateDialog = preload("res://addons/better-texture-array/ui/create_dialog.tscn")
 const EditDialog = preload("res://addons/better-texture-array/ui/edit_dialog.gd")
 var undo_redo: UndoRedo
 var create_button
@@ -16,13 +17,13 @@ func _init():
 	label = "Layers"
 	create_button = Button.new()
 	create_button.text = "Create"
-	create_dialog = preload("res://addons/better-texture-array/ui/create_dialog.tscn").instance()
+	create_dialog = CreateDialog.instance()
 	edit_dialog = EditDialog.new()
-	
+
 	layer_box = VBoxContainer.new()
 	layer_list = VBoxContainer.new()
 	layer_group = ButtonGroup.new()
-	
+
 	toolbar = HBoxContainer.new()
 	var tbb_vis = CheckButton.new()
 	var tbb_sep = VSeparator.new()
@@ -32,7 +33,7 @@ func _init():
 	var tbb_blu = Button.new()
 	var tbb_alp = Button.new()
 	var tbb_all = Button.new()
-	
+
 	toolbar.alignment = BoxContainer.ALIGN_CENTER
 	tbb_sep.size_flags_horizontal = SIZE_EXPAND_FILL
 	tbb_sep.add_stylebox_override("separator", StyleBoxEmpty.new())
@@ -54,13 +55,13 @@ func _init():
 	tbb_alp.group = tbb_grp
 	tbb_all.group = tbb_grp
 	tbb_all.pressed = true
-	
+
 	tbb_red.connect("toggled", self, "_toggle_channel", [Layer.Channels.RED])
 	tbb_grn.connect("toggled", self, "_toggle_channel", [Layer.Channels.GREEN])
 	tbb_blu.connect("toggled", self, "_toggle_channel", [Layer.Channels.BLUE])
 	tbb_alp.connect("toggled", self, "_toggle_channel", [Layer.Channels.ALPHA])
 	tbb_all.connect("toggled", self, "_toggle_channel", [Layer.Channels.ALL])
-	
+
 	toolbar.add_child(tbb_vis)
 	toolbar.add_child(tbb_sep)
 	toolbar.add_child(tbb_red)
@@ -69,11 +70,11 @@ func _init():
 	toolbar.add_child(tbb_alp)
 	toolbar.add_child(tbb_all)
 	toolbar.add_constant_override("separation", 0)
-	
+
 	layer_list.visible = false
 	layer_box.add_child(toolbar)
 	layer_box.add_child(layer_list)
-	
+
 	tbb_vis.connect("toggled", self, "_toggle_layers")
 	create_button.connect("pressed", self, "_open_create_dialog")
 	create_dialog.connect("acknowledged", self, "_do_create_texarr")
@@ -113,6 +114,7 @@ func update_property():
 	update_list()
 
 func create_texarr(width: int, height: int, depth: int, format: int, flags: int = Texture.FLAGS_DEFAULT):
+	var texarr: TextureLayered = get_edited_object()
 	var data = {"width": width, "height": height, "depth": depth, "format": format, "flags": flags, "layers": []}
 	var img = Image.new()
 	img.create(width, height, true, format)
@@ -121,6 +123,7 @@ func create_texarr(width: int, height: int, depth: int, format: int, flags: int 
 	for i in depth:
 		data["layers"].append(img)
 	emit_changed("data", data)
+#	texarr.property_list_changed_notify()
 
 func update_texarr(src: Image, idx: int, src_chn: int, dst_chn: int):
 	var texarr: TextureLayered = get_edited_object()
@@ -133,7 +136,7 @@ func update_texarr(src: Image, idx: int, src_chn: int, dst_chn: int):
 static func _update_layer(texarr: TextureLayered, src, idx: int, chn_src: int = Layer.Channels.ALL, chn_dst: int = Layer.Channels.ALL):
 	var dst: Image
 	var size = Vector2(texarr.get_width(), texarr.get_height())
-	
+
 	if src is Texture:
 		src = src.get_data()
 	if src.get_size() != size:
@@ -142,7 +145,7 @@ static func _update_layer(texarr: TextureLayered, src, idx: int, chn_src: int = 
 		src.decompress()
 	if src.get_format() != texarr.get_format():
 		src.convert(texarr.get_format())
-	
+
 	if chn_src == Layer.Channels.ALL or chn_dst == Layer.Channels.ALL:
 		dst = src
 	else:
@@ -156,9 +159,10 @@ static func _update_layer(texarr: TextureLayered, src, idx: int, chn_src: int = 
 				dst.set_pixel(x, y, clr)
 		dst.unlock()
 		src.unlock()
-	
+
 	dst.generate_mipmaps()
 	texarr.set_layer_data(dst, idx)
+#	texarr.property_list_changed_notify()
 
 func _open_create_dialog():
 	create_dialog.popup_centered()
