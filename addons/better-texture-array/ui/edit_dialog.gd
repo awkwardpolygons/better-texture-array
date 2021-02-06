@@ -31,6 +31,9 @@ func _init():
 
 func popup_for_layer(lyr):
 	layer = lyr
+	# Only show the channel selection box if you have selected
+	# a channel to view on the layer
+	channel_option_box.visible = lyr.channel != Layer.Channels.ALL
 	popup_centered_ratio()
 
 func _on_file_selected(path):
