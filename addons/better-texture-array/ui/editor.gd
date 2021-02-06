@@ -12,6 +12,14 @@ var layer_box
 var layer_list
 var layer_group
 var toolbar
+var tbb_vis
+var tbb_sep
+var tbb_grp
+var tbb_red
+var tbb_grn
+var tbb_blu
+var tbb_alp
+var tbb_all
 
 func _init():
 	label = "Layers"
@@ -25,14 +33,14 @@ func _init():
 	layer_group = ButtonGroup.new()
 
 	toolbar = HBoxContainer.new()
-	var tbb_vis = CheckButton.new()
-	var tbb_sep = VSeparator.new()
-	var tbb_grp = ButtonGroup.new()
-	var tbb_red = Button.new()
-	var tbb_grn = Button.new()
-	var tbb_blu = Button.new()
-	var tbb_alp = Button.new()
-	var tbb_all = Button.new()
+	tbb_vis = CheckButton.new()
+	tbb_sep = VSeparator.new()
+	tbb_grp = ButtonGroup.new()
+	tbb_red = Button.new()
+	tbb_grn = Button.new()
+	tbb_blu = Button.new()
+	tbb_alp = Button.new()
+	tbb_all = Button.new()
 
 	toolbar.alignment = BoxContainer.ALIGN_CENTER
 	tbb_sep.size_flags_horizontal = SIZE_EXPAND_FILL
@@ -111,6 +119,12 @@ func _ready():
 	set_bottom_editor(layer_box)
 
 func update_property():
+	# Reset the visible state of the layers UI from the meta value `layers_visible`
+	var texarr = get_edited_object()
+	var vis = texarr.has_meta("layers_visible") and texarr.get_meta("layers_visible")
+	layer_list.visible = vis
+	tbb_vis.pressed = vis
+	
 	update_list()
 
 func create_texarr(width: int, height: int, depth: int, format: int, flags: int = Texture.FLAGS_DEFAULT):
@@ -162,7 +176,7 @@ static func _update_layer(texarr: TextureLayered, src, idx: int, chn_src: int = 
 
 	dst.generate_mipmaps()
 	texarr.set_layer_data(dst, idx)
-#	texarr.property_list_changed_notify()
+	texarr.property_list_changed_notify()
 
 func _open_create_dialog():
 	create_dialog.popup_centered()
@@ -171,6 +185,8 @@ func _do_create_texarr(ok, vals):
 	create_texarr(vals[0], vals[1], vals[2], vals[3], vals[4])
 
 func _toggle_layers(visible: bool):
+	# Store the layers visible state in meta for use on UI reload in `update_property`
+	get_edited_object().set_meta("layers_visible", visible)
 	layer_list.visible = visible
 
 func _toggle_channel(visible: bool, chn: int):
