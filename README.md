@@ -20,3 +20,8 @@ The plugin also provides a custom importer for TextureArray and Texture3D.
 The builtin importer requires a large single image with each of the layers as a tile in a grid.
 
 With the BetterTextureArray importer, you can use a simple `JSON` build format to create TextureArray and Texture3D from a list of other image files.
+
+# Guide
+## Installation
+1. To install copy the `better-texture-array` from the `addons` folder to your project's `addons` folder.
+2. Open your project in the edtior and choose Project Setting... -> Plugin from the Project menu and enable BetterTextureArray.
