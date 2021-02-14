@@ -52,4 +52,13 @@ The `layers` property can also contain a more complex blending object instead of
 
 A more complex channel mixing example:
 ```json
+{
+  "size": [1024, 1024],
+  "layers": [
+    {
+      "rgb": ["res://assets/textures/albedo.jpg", "rgb"],
+      "a": ["res://assets/textures/bump.jpg", "r"],
+    },
+  ],
+}
 ```
