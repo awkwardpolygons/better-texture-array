@@ -24,4 +24,32 @@ With the BetterTextureArray importer, you can use a simple `JSON` build format t
 # Guide
 ## Installation
 1. To install copy the `better-texture-array` from the `addons` folder to your project's `addons` folder.
-2. Open your project in the edtior and choose Project Setting... -> Plugin from the Project menu and enable BetterTextureArray.
+2. Open your project in the edtior and choose Project Settings... -> Plugins from the Project menu and enable BetterTextureArray.
+
+# Importer
+Create a `JSON` file with a `.ta-builder` file extension for TextureArray and `.t3d-builder` extension for Texture3D.
+
+The `JSON` object must contain a `size` array property, and a `layers` array property.
+
+The `size` property must have two values for the width and height of each layer.
+
+The `layers` will contain URLs to each image file or resource to use for each layer. You can use a `res://` or a `file://` reference.
+
+A simple example file:
+```json
+{
+  "size": [1024, 1024],
+  "layers": [
+    "res://assets/textures/rock1.jpg",
+    "res://assets/textures/rock2.jpg",
+    "res://assets/textures/rock3.jpg",
+    "file://home/user/assets/snow1.jpg",
+  ],
+}
+```
+
+The `layers` property can also contain a more complex blending object instead of a simple URL if you want to mix channels from multiple sources into one layer.
+
+A more complex channel mixing example:
+```json
+```
