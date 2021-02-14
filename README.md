@@ -11,8 +11,8 @@ Attempting to save TextureArray and Texture3D inside the scene or as `.res` or `
 This plugin adds support for saving TextureArray and Texture3D as `.texarr` and `.tex3d` files both in the editor and from code.
 These are the native Godot importer formats for TextureArray and Texture3D.
 
-This plugin also adds UI so that you can create, edit and, save TextureArray and Texture3D in the editor as well.
-The editor UI allows you to edit not individual layers, and each RGBA channel on a layer as well. This is very useful when trying to merge multiple PBR material textures into one file.
+This plugin also adds UI so that you can create, view, edit and, save TextureArray and Texture3D in the editor.
+The editor UI allows you to edit individual layers, and each RGBA channel on a layer as well. This is very useful when trying to merge multiple PBR material textures into one file.
 
 ## Extras
 The plugin also provides a custom importer for TextureArray and Texture3D.
