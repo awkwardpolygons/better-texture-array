@@ -2,7 +2,7 @@ tool
 extends Button
 
 enum Channels {RED, GREEN, BLUE, ALPHA, ALL}
-export(TextureLayered) var texture setget set_texture
+export(TextureLayered) var texture: TextureLayered setget set_texture
 export(int) var index = 0 setget set_index
 export(Channels) var channel = Channels.ALL setget set_channel
 
@@ -56,6 +56,7 @@ func _notification(what):
 func _toggled(pressed: bool):
 	if pressed:
 		texture.set_meta("layer_selected", index)
+		texture.emit_signal("changed")
 
 func _input(event):
 	if is_hovered() and event is InputEventMouseButton and event.doubleclick:
