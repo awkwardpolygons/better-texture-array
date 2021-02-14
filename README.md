@@ -29,11 +29,11 @@ With the BetterTextureArray importer, you can use a simple `JSON` build format t
 ## Editor
 1. To create a new TextureArray or Texture3D click the create new resource icon in the inspector.
 2. Then click the **create** button in the new resource to set the width, height and depth (the number of layers), and choose the image format.
-3. Click the show toggle to show or hide the layers.
+3. Click the **show** toggle to show or hide the layers.
 4. You should have several new white layers.
 5. **Double click** a layer to set an image for that layer.
 6. Select a channel from the channel buttons to view only that channel for the layers.
-7. With a channel selected, double click a layer to set data for that channel only. The file chooser in channel mode will include a drop down to choose the source channel from your selected file.
+7. With a channel selected, **double click** a layer to set data for that channel only. The file chooser in channel mode will include a drop down to choose the source channel from your selected file.
 
 ## Importer
 Create a `JSON` file with a `.ta-builder` file extension for TextureArray and `.t3d-builder` extension for Texture3D.
