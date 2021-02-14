@@ -26,12 +26,22 @@ With the BetterTextureArray importer, you can use a simple `JSON` build format t
 1. To install copy the `better-texture-array` from the `addons` folder to your project's `addons` folder.
 2. Open your project in the edtior and choose Project Settings... -> Plugins from the Project menu and enable BetterTextureArray.
 
-# Importer
+## Editor
+1. To create a new TextureArray or Texture3D click the create new resource icon in the inspector.
+2. Then click the **create** button in the new resource to set the width, height and depth (the number of layers), and choose the image format.
+3. Click the show toggle to show or hide the layers.
+4. You should have several new white layers.
+5. **Double click** a layer to set an image for that layer.
+6. Select a channel from the channel buttons to view only that channel for the layers.
+7. With a channel selected, double click a layer to set data for that channel only. The file chooser in channel mode will include a drop down to choose the source channel from your selected file.
+
+## Importer
 Create a `JSON` file with a `.ta-builder` file extension for TextureArray and `.t3d-builder` extension for Texture3D.
+Select the file from the importer in the editor to customize import properties.
 
 The `JSON` object must contain a `size` array property, and a `layers` array property.
 
-The `size` property must have two values for the width and height of each layer.
+The `size` property must have two values for the width and height the layers.
 
 The `layers` will contain URLs to each image file or resource to use for each layer. You can use a `res://` or a `file://` reference.
 
@@ -62,3 +72,7 @@ A more complex channel mixing example:
   ],
 }
 ```
+
+The blending object property keys are the target channels, represented by `r`, `g`, `b`, and `a`, on their own or in combination.
+
+The blending object property value is an array of two values, the first is the source file or resource, the second is string with the source channels or channel, again represented by `r`, `g`, `b`, and `a`.
