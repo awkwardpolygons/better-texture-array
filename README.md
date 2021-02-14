@@ -34,6 +34,7 @@ With the BetterTextureArray importer, you can use a simple `JSON` build format t
 5. **Double click** a layer to set an image for that layer.
 6. Select a channel from the channel buttons to view only that channel for the layers.
 7. With a channel selected, **double click** a layer to set data for that channel only. The file chooser in channel mode will include a drop down to choose the source channel from your selected file.
+8. You can select a layer by **clicking** on it. The index of the selected layer will be set in the metadata of the TextureArray or Texture3D as `layer_selected` and the `changed` signal will be emitted. This is useful if you want to interact with this UI in another editor plugin.
 
 ## Importer
 Create a `JSON` file with a `.ta-builder` file extension for TextureArray and `.t3d-builder` extension for Texture3D.
