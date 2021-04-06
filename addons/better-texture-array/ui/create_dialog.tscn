@@ -17,6 +17,10 @@ var formats = {
 	\"FORMAT_RG8\": Image.FORMAT_RG8,
 	\"FORMAT_RGB8\": Image.FORMAT_RGB8,
 	\"FORMAT_RGBA8\": Image.FORMAT_RGBA8,
+	\"FORMAT_RGBH\": Image.FORMAT_RGBH,
+	\"FORMAT_RGBAH\": Image.FORMAT_RGBAH,
+	\"FORMAT_RGBF\": Image.FORMAT_RGBF,
+	\"FORMAT_RGBAF\": Image.FORMAT_RGBAF,
 }
 
 var compression_vram = {
@@ -82,10 +86,13 @@ func _on_compression_selected(i):
 
 [node name="CreateDialog" type="WindowDialog"]
 visible = true
+anchor_right = 0.1
+anchor_bottom = 0.05
 margin_right = 350.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 350, 200 )
 window_title = "Create layers..."
+resizable = true
 script = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -103,20 +110,20 @@ __meta__ = {
 }
 
 [node name="WidthInput" type="HBoxContainer" parent="Box"]
-margin_right = 334.0
+margin_right = 436.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="Label" type="Label" parent="Box/WidthInput"]
 margin_top = 9.0
-margin_right = 165.0
+margin_right = 216.0
 margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "Width"
 
 [node name="Width" type="SpinBox" parent="Box/WidthInput"]
-margin_left = 169.0
-margin_right = 334.0
+margin_left = 220.0
+margin_right = 436.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 min_value = 32.0
@@ -125,20 +132,20 @@ value = 1024.0
 
 [node name="HeightInput" type="HBoxContainer" parent="Box"]
 margin_top = 36.0
-margin_right = 334.0
+margin_right = 436.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="Label" type="Label" parent="Box/HeightInput"]
 margin_top = 9.0
-margin_right = 165.0
+margin_right = 216.0
 margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "Height"
 
 [node name="Height" type="SpinBox" parent="Box/HeightInput"]
-margin_left = 169.0
-margin_right = 334.0
+margin_left = 220.0
+margin_right = 436.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 min_value = 32.0
@@ -147,20 +154,20 @@ value = 1024.0
 
 [node name="DepthInput" type="HBoxContainer" parent="Box"]
 margin_top = 72.0
-margin_right = 334.0
+margin_right = 436.0
 margin_bottom = 104.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="Label" type="Label" parent="Box/DepthInput"]
 margin_top = 9.0
-margin_right = 165.0
+margin_right = 216.0
 margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "Depth"
 
 [node name="Depth" type="SpinBox" parent="Box/DepthInput"]
-margin_left = 169.0
-margin_right = 334.0
+margin_left = 220.0
+margin_right = 436.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 min_value = 1.0
@@ -169,43 +176,43 @@ value = 16.0
 
 [node name="FormatInput" type="HBoxContainer" parent="Box"]
 margin_top = 108.0
-margin_right = 334.0
+margin_right = 436.0
 margin_bottom = 140.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="Label" type="Label" parent="Box/FormatInput"]
 margin_top = 9.0
-margin_right = 165.0
+margin_right = 216.0
 margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "Format"
 
 [node name="Format" type="OptionButton" parent="Box/FormatInput"]
-margin_left = 169.0
-margin_right = 334.0
+margin_left = 220.0
+margin_right = 436.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 text = "FORMAT_RGBA8"
-items = [ "FORMAT_L8", null, false, 0, null, "FORMAT_LA8", null, false, 1, null, "FORMAT_R8", null, false, 2, null, "FORMAT_RG8", null, false, 3, null, "FORMAT_RGB8", null, false, 4, null, "FORMAT_RGBA8", null, false, 5, null ]
+items = [ "FORMAT_L8", null, false, 0, null, "FORMAT_LA8", null, false, 1, null, "FORMAT_R8", null, false, 2, null, "FORMAT_RG8", null, false, 3, null, "FORMAT_RGB8", null, false, 4, null, "FORMAT_RGBA8", null, false, 5, null, "FORMAT_RGBH", null, false, 14, null, "FORMAT_RGBAH", null, false, 15, null, "FORMAT_RGBF", null, false, 10, null, "FORMAT_RGBAF", null, false, 11, null ]
 selected = 5
 
 [node name="CompressInput" type="HBoxContainer" parent="Box"]
 visible = false
 margin_top = 144.0
-margin_right = 334.0
+margin_right = 436.0
 margin_bottom = 176.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="Label" type="Label" parent="Box/CompressInput"]
 margin_top = 9.0
-margin_right = 165.0
+margin_right = 216.0
 margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "Compression"
 
 [node name="CompressMode" type="OptionButton" parent="Box/CompressInput"]
-margin_left = 169.0
-margin_right = 334.0
+margin_left = 220.0
+margin_right = 436.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 text = "Lossless"
@@ -215,20 +222,20 @@ selected = 0
 [node name="CompressVRAMInput" type="HBoxContainer" parent="Box"]
 visible = false
 margin_top = 180.0
-margin_right = 334.0
+margin_right = 436.0
 margin_bottom = 212.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="Label" type="Label" parent="Box/CompressVRAMInput"]
 margin_top = 9.0
-margin_right = 165.0
+margin_right = 216.0
 margin_bottom = 23.0
 size_flags_horizontal = 3
 text = "VRAM Compression"
 
 [node name="CompressMode" type="OptionButton" parent="Box/CompressVRAMInput"]
-margin_left = 169.0
-margin_right = 334.0
+margin_left = 220.0
+margin_right = 436.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 text = "NONE"
@@ -237,25 +244,26 @@ selected = 0
 
 [node name="Spacer" type="Control" parent="Box"]
 margin_top = 144.0
-margin_right = 334.0
-margin_bottom = 149.0
+margin_right = 436.0
+margin_bottom = 178.0
 rect_min_size = Vector2( 0, 5 )
+size_flags_vertical = 3
 
 [node name="Buttons" type="HBoxContainer" parent="Box"]
-margin_top = 153.0
-margin_right = 334.0
-margin_bottom = 185.0
+margin_top = 182.0
+margin_right = 436.0
+margin_bottom = 214.0
 rect_min_size = Vector2( 0, 32 )
 
 [node name="Cancel" type="Button" parent="Box/Buttons"]
-margin_right = 165.0
+margin_right = 216.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 text = "Cancel"
 
 [node name="Accept" type="Button" parent="Box/Buttons"]
-margin_left = 169.0
-margin_right = 334.0
+margin_left = 220.0
+margin_right = 436.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 text = "Create"
